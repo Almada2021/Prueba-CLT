@@ -1,0 +1,10 @@
+# write gitignore for .Net core project ignore notes folder
+notes
+
+# ignore bin and obj folders
+
+bin
+obj
+
+# ignore .vs folder
+.vs
