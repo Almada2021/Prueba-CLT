@@ -8,3 +8,5 @@ obj
 
 # ignore .vs folder
 .vs
+
+PruebaTecnica.db

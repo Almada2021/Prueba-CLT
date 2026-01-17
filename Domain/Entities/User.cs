@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace Domain;
+namespace Domain.Entities;
 
 /*
 Campos mínimos:
@@ -19,4 +19,7 @@ public class User
     public required string Email { get; set; }
     public bool IsActive { get; set; } = true;
     public required string Password { get; set; }
+
+    // 1:N One To Many
+    public ICollection<Address> Addresses { get; set; } = new List<Address>();
 }
