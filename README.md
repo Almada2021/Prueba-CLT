@@ -13,7 +13,7 @@ ademas de el uso de un header especifico para la autenticacion de las peticiones
 1. Clonar el repositorio tener instalado dotnet 10.0.100 y entity framework core.
 2. Ejecutar el comando `dotnet ef database update` para crear la base de datos con sus tablas users, adresses y currencies.
 3. Ejecutar el comando `dotnet run` para iniciar el servidor
-4. Abrir el navegador y acceder a `http://localhost:5165/swagger`
+4. Abrir el navegador y acceder a `http://localhost:5165/swagger` Para ver la documentacion de la API.
 
 
 ## Caracteristicas ya Implementadas de los requisitos
