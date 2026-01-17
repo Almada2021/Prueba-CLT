@@ -8,10 +8,14 @@ options.UseSqlite("Data Source=PruebaTecnica.db")
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
+
+// verify is not production?
 if (app.Environment.IsDevelopment())
 {
+    // Show swagger
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.MapGet("/", () => "Hello World!");
 app.Run();
