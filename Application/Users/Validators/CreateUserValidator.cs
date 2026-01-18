@@ -6,7 +6,8 @@ public class CreateUserValidator : AbstractValidator<CreateUserRequest>
     public CreateUserValidator()
     {
         RuleFor(user => user.Name)
-            .NotEmpty().WithMessage("El nombre no puede estar vacío");
+            .NotEmpty().WithMessage("El nombre no puede estar vacío")
+            .MinimumLength(1).WithMessage("El nombre debe tener por lo menos un caracter");
 
         RuleFor(user => user.Email)
             .NotEmpty().WithMessage("El email es requerido")

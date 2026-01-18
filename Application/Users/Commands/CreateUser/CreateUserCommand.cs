@@ -3,6 +3,7 @@ using Infrastructure.Data;
 using MediatR;
 using Infrastructure.lib;
 using Domain.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Users.Commands;
 
@@ -18,7 +19,7 @@ public class CreateUserCommandHandler(AppDbContext context) : IRequestHandler<Cr
         var passwordHash = PasswordHasher.HashPassword(request.Password);
 
         // Verify if user already exists
-        var userExists = _context.Users.Any(u => u.Email == request.Email);
+        var userExists = await _context.Users.AnyAsync(u => u.Email == request.Email);
         if (userExists)
         {
             throw new AlreadyExistsException("Usuario Ya Existe con este Email");
