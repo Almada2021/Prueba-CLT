@@ -1,4 +1,4 @@
-namespace Application.Users.Commands;
+namespace Application.Users;
 
 public class UserResponseDto
 {
