@@ -30,8 +30,11 @@ if (app.Environment.IsDevelopment())
 app.Logger.LogInformation("Server Running on PORT:");
 app.MapGet("/", () => "Hello World!");
 
+// USERS ROUTES
 
-app.MapPost("/users", async (CreateUserRequest request, IMediator mediator, IValidator<CreateUserRequest> validator) =>
+var usersGroup = app.MapGroup("/users")
+    .WithTags("Users");
+usersGroup.MapPost("/users", async (CreateUserRequest request, IMediator mediator, IValidator<CreateUserRequest> validator) =>
 {
 
     var validationResult = await validator.ValidateAsync(request);
@@ -45,4 +48,13 @@ app.MapPost("/users", async (CreateUserRequest request, IMediator mediator, IVal
 
     return Results.Created($"/users/{user.Id}", user);
 });
+
+// DELETE USER
+usersGroup.MapDelete("/users/{id}", async (int id, IMediator mediator) =>
+{
+    var command = new DeleteUserCommand(id);
+    var user = await mediator.Send(command);
+    return Results.Ok(user);
+});
+
 app.Run();
