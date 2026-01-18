@@ -38,8 +38,8 @@ app.MapPost("/users", async (CreateUserRequest request, IMediator mediator, IVal
     }
 
     var command = new CreateUserCommand(request.Name, request.Email, request.Password);
-    var userId = await mediator.Send(command);
+    var user = await mediator.Send(command);
 
-    return Results.Created($"/users/{userId}", new { id = userId });
+    return Results.Created($"/users/{user.Id}", user);
 });
 app.Run();

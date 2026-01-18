@@ -5,13 +5,13 @@ using Infrastructure.lib;
 
 namespace Application.Users.Commands;
 
-public record CreateUserCommand(string Name, string Email, string Password) : IRequest<User>;
+public record CreateUserCommand(string Name, string Email, string Password) : IRequest<UserResponseDto>;
 
-public class CreateUserCommandHandler(AppDbContext context) : IRequestHandler<CreateUserCommand, User>
+public class CreateUserCommandHandler(AppDbContext context) : IRequestHandler<CreateUserCommand, UserResponseDto>
 {
     private readonly AppDbContext _context = context;
 
-    public async Task<User> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    public async Task<UserResponseDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         // HASH Password don't store plain text :)
         var passwordHash = PasswordHasher.HashPassword(request.Password);
@@ -32,12 +32,13 @@ public class CreateUserCommandHandler(AppDbContext context) : IRequestHandler<Cr
         // Save the user using private hashed password
         _context.Users.Add(user);
         await _context.SaveChangesAsync(cancellationToken);
-        var userResponse = {
+        // Return the created user entity
+        return new UserResponseDto
+        {
             Id = user.Id,
             Name = user.Name,
             Email = user.Email,
             IsActive = user.IsActive
         };
-        return userResponse;
     }
 }
