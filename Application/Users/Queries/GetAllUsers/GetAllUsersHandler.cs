@@ -1,4 +1,3 @@
-using Domain.Entities;
 using Infrastructure.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +10,7 @@ public class GetAllUsersQueryHandler(AppDbContext context) : IRequestHandler<Get
     public async Task<List<UserResponseDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
         // GET ALL USERS
-        return await context.Users
+        return await _context.Users
               .AsNoTracking()
               .Select(user => new UserResponseDto
               {

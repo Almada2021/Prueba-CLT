@@ -77,7 +77,7 @@ usersGroup.MapGet("/", async (IMediator mediator) =>
 {
     var query = new GetAllUsersQuery();
     var users = await mediator.Send(query);
-    return Results.Ok(users);
+    return Results.Ok(new { users });
 
 });
 
