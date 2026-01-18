@@ -1,4 +1,3 @@
-
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Middleware;
@@ -29,7 +28,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseMiddleware<ApiKeyMiddleware>();
 app.Logger.LogInformation("Server Running on PORT:");
 app.MapGet("/", () => "Hello World!");
 
