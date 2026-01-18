@@ -56,7 +56,11 @@ public static class UserEndpoints
             var users = await mediator.Send(query);
             return Results.Ok(new { users });
 
-        });
+        })
+        .WithSummary("Obtener todos los usuarios")
+        .WithDescription("Obtiene todos los usuarios.")
+        .Produces<UserResponseDto>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status401Unauthorized);
 
         // GET BY ID
         usersGroup.MapGet("/{id}", async (int id, IMediator mediator) =>

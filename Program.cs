@@ -1,38 +1,68 @@
-
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Middleware;
 using Application.Users.Commands;
 using Infrastructure.Data;
 using Endpoints;
+using Microsoft.AspNetCore.OpenApi;
+using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // DB
 builder.Services.AddDbContext<AppDbContext>(options =>
-options.UseSqlite("Data Source=PruebaTecnica.db")
+    options.UseSqlite("Data Source=PruebaTecnica.db")
 );
 
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(CreateUserCommand).Assembly));
+
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserRequest>();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+// Configuración nativa de OpenAPI 
+builder.Services.AddOpenApi(options =>
+{
+    /*
+    Esto permite agregar el header X-API-KEY a todos los endpoints
+    facilitando la prueba de la API y el desarrollo.
+    */
+    options.AddOperationTransformer((operation, context, cancellationToken) =>
+    {
+        operation.Parameters ??= new List<IOpenApiParameter>();
+        operation.Parameters.Add(new OpenApiParameter
+        {
+            Name = "X-API-KEY",
+            In = ParameterLocation.Header,
+            Required = true,
+            Schema = new OpenApiSchema { Type = JsonSchemaType.String },
+            Description = "Introduce tu API Key"
+        });
+        return Task.CompletedTask;
+    });
+});
+
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+
 var app = builder.Build();
+
 app.UseExceptionHandler();
-// verify is not production?
+// Swagger
 if (app.Environment.IsDevelopment())
 {
-    // Show swagger
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
+
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "v1");
+        options.RoutePrefix = "swagger";
+    });
 }
+app.UseMiddleware<ApiKeyMiddleware>();
 
-app.Logger.LogInformation("Server Running on PORT:");
+app.Logger.LogInformation("Server Running on PORT: 5165");
+
 app.MapGet("/", () => "Hello World!");
-
 app.MapUserEndpoints();
 
 app.Run();
