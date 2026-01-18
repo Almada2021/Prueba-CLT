@@ -3,7 +3,7 @@ using Application.Users.Commands.UpdateUserCommand;
 
 namespace Application.Users.Validators;
 
-public class UpdateUserValidator : AbstractValidator<UpdateUserRequets>
+public class UpdateUserValidator : AbstractValidator<UpdateUserRequest>
 {
     public UpdateUserValidator()
     {

@@ -1,6 +1,6 @@
 namespace Application.Users.Commands.UpdateUserCommand;
 
-public class UpdateUserRequets
+public class UpdateUserRequest
 {
     public required string Name { get; set; }
     public required string Email { get; set; }
