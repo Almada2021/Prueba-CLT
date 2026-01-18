@@ -2,6 +2,7 @@ using Domain.Entities;
 using Infrastructure.Data;
 using MediatR;
 using Infrastructure.lib;
+using Domain.Exceptions;
 
 namespace Application.Users.Commands;
 
@@ -20,7 +21,7 @@ public class CreateUserCommandHandler(AppDbContext context) : IRequestHandler<Cr
         var userExists = _context.Users.Any(u => u.Email == request.Email);
         if (userExists)
         {
-            throw new Exception("Usuario ya existe");
+            throw new AlreadyExistsException("Usuario Ya Existe con este Email");
         }
         var user = new User
         {
