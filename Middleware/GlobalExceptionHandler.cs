@@ -16,6 +16,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
 
         var (statusCode, title) = exception switch
         {
+            NotFoundException => (StatusCodes.Status404NotFound, "El Recurso No Existe"),
             AlreadyExistsException => (StatusCodes.Status409Conflict, "Conflicto de recurso"),
             _ => (StatusCodes.Status500InternalServerError, "Error interno del servidor")
         };
