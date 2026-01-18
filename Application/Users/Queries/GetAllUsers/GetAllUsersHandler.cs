@@ -10,14 +10,16 @@ public class GetAllUsersQueryHandler(AppDbContext context) : IRequestHandler<Get
 
     public async Task<List<UserResponseDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
-        // Delete user
-        List<User> users = await _context.Users.ToListAsync();
-        return users.Select(user => new UserResponseDto
-        {
-            Id = user.Id,
-            Name = user.Name,
-            Email = user.Email,
-            IsActive = user.IsActive,
-        }).ToList();
+        // GET ALL USERS
+        return await context.Users
+              .AsNoTracking()
+              .Select(user => new UserResponseDto
+              {
+                  Id = user.Id,
+                  Name = user.Name,
+                  Email = user.Email,
+                  IsActive = user.IsActive,
+              })
+              .ToListAsync(cancellationToken); //
     }
 }
