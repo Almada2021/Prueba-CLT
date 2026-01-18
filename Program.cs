@@ -6,6 +6,7 @@ using Application.Users.Commands;
 using Application.Users;
 using Infrastructure.Data;
 using Application.Users.Queries;
+using Application.Users.Commands.UpdateUserCommand;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,14 +82,37 @@ usersGroup.MapGet("/", async (IMediator mediator) =>
 
 });
 
-// usersGroup.MapGet("/{id}", async (int id, IMediator mediator) =>
-// {
-//     var query = new GetUserByIdQuery(id);
-//     var user = await mediator.Send(query);
-//     return Results.Ok(user);
-// });
+usersGroup.MapGet("/{id}", async (int id, IMediator mediator) =>
+{
+    var query = new GetUserByIdQuery(id);
+    var user = await mediator.Send<UserResponseDto>(query!);
+    return Results.Ok(user);
+}).WithSummary("Obtener un usuario por su ID")
+.WithDescription("Obtiene un usuario por su ID.")
+.Produces<UserResponseDto>(StatusCodes.Status200OK)
+.Produces<HttpValidationProblemDetails>(StatusCodes.Status404NotFound, "application/problem+json")
+.Produces(StatusCodes.Status401Unauthorized);
 
 
 
+usersGroup.MapPut("/{id}", async (int id, UpdateUserRequets request, IMediator mediator, IValidator<UpdateUserRequets> validator) =>
+{
+    // 1. Validar el input
+    var validationResult = await validator.ValidateAsync(request);
+    if (!validationResult.IsValid)
+    {
+        return Results.ValidationProblem(validationResult.ToDictionary());
+    }
+
+    var command = new UpdateUserCommand(id, request.Name!, request.Email!, request.IsActive!);
+    var result = await mediator.Send(command);
+
+    return Results.Ok(result);
+})
+.WithSummary("Actualizar un usuario")
+.Produces<UserResponseDto>(StatusCodes.Status200OK)
+.ProducesValidationProblem()
+.Produces(StatusCodes.Status404NotFound)
+.Produces(StatusCodes.Status401Unauthorized);
 
 app.Run();
