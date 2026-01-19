@@ -9,8 +9,10 @@ using Microsoft.OpenApi;
 var builder = WebApplication.CreateBuilder(args);
 
 // DB
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite("Data Source=PruebaTecnica.db")
+    options.UseSqlite(connectionString)
 );
 
 builder.Services.AddMediatR(cfg =>
