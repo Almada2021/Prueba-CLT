@@ -4,6 +4,9 @@ using Application.Users.Commands;
 using Application.Users.Queries;
 using Application.Users;
 using Application.Users.Commands.UpdateUserCommand;
+using Application.Addresses.Common;
+using Application.Addresses.Commands;
+using Application.Addresses.Queries;
 
 namespace Endpoints;
 
@@ -93,6 +96,40 @@ public static class UserEndpoints
         .Produces<UserResponseDto>(StatusCodes.Status200OK)
         .ProducesValidationProblem()
         .Produces(StatusCodes.Status404NotFound)
+        .Produces(StatusCodes.Status401Unauthorized);
+
+
+
+        // CREATE ADDRESSS
+        usersGroup.MapPost("{id}/addresses", async (int id, CreateAddressRequest request, IMediator mediator, IValidator<CreateAddressRequest> validator) =>
+        {
+            var validationResult = await validator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                return Results.ValidationProblem(validationResult.ToDictionary());
+            }
+
+            var command = new CreateAdressCommand(id, request.Street, request.City, request.Country, request.ZipCode);
+            var adress = await mediator.Send(command);
+
+            return Results.Created($"/users/{id}/adresses/{adress.Id}", adress);
+        }).WithSummary("Registrar una nueva dirección")
+        .WithDescription("Crea una dirección con los datos proporcionados.")
+        .Produces<AdressResponseDto>(StatusCodes.Status201Created)
+        .ProducesValidationProblem()
+        .Produces<HttpValidationProblemDetails>(StatusCodes.Status409Conflict, "application/problem+json")
+        .Produces(StatusCodes.Status401Unauthorized);
+
+        // GET ALL ADDRESSES BY USER ID
+        usersGroup.MapGet("{id}/addresses", async (int id, IMediator mediator) =>
+        {
+            var query = new GetAllAddressesByUserIdQuery(id);
+            var addresses = await mediator.Send(query);
+            return Results.Ok(new { addresses });
+        })
+        .WithSummary("Obtener todas las direcciones")
+        .WithDescription("Obtiene todas las direcciones.")
+        .Produces<UserResponseDto>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status401Unauthorized);
     }
 }
