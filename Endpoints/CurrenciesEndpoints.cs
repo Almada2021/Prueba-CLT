@@ -2,6 +2,7 @@ using MediatR;
 using Application.Currencies.Commands;
 using FluentValidation;
 using Application.Currencies;
+using Application.Currencies.Queries;
 namespace Endpoints;
 
 public static class CurrenciesEndpoints
@@ -9,11 +10,17 @@ public static class CurrenciesEndpoints
     public static void MapCurrenciesEndpoints(this WebApplication app)
     {
         var currenciesRoute = app.MapGroup("/currencies").WithTags("Currencies");
-        // app.MapGet("/currencies", async (IMediator mediator) =>
-        // {
-        //     var currencies = await mediator.Send(new GetAllCurrenciesQuery());
-        //     return Results.Ok(currencies);
-        // });
+        currenciesRoute.MapGet("", async (IMediator mediator) =>
+        {
+            var query = new GetAllCurrenciesQuery();
+            var currencies = await mediator.Send(query);
+            return Results.Ok(new { currencies });
+        })
+        .WithSummary("Obtener todas las monedas")
+        .WithDescription("Obtiene todas las monedas registradas en el sistema.")
+        .Produces<CurrencyResponseDto>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status401Unauthorized)
+        ;
 
         currenciesRoute.MapPost("", async (CreateCurrencyRequest request, IMediator mediator, IValidator<CreateCurrencyRequest> validator) =>
         {
