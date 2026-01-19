@@ -17,6 +17,7 @@ public class GetAllAddressesByUserIdHandler : IRequestHandler<GetAllAddressesByU
     public async Task<List<AdressResponseDto>> Handle(GetAllAddressesByUserIdQuery request, CancellationToken cancellationToken)
     {
         var addresses = await _context.Addresses
+            .AsNoTracking()
             .Where(a => a.UserId == request.UserId)
             .ToListAsync(cancellationToken);
 

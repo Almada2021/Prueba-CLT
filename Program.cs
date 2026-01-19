@@ -62,4 +62,5 @@ app.Logger.LogInformation("Server Running on PORT: 5165");
 app.MapGet("/", () => "Hello World!");
 app.MapUserEndpoints();
 app.MapAddressEndpoints();
+app.MapCurrenciesEndpoints();
 app.Run();
