@@ -53,9 +53,9 @@ public static class UserEndpoints
         ;
 
         // GET ALL USERS 
-        usersGroup.MapGet("/", async (IMediator mediator) =>
+        usersGroup.MapGet("/", async (bool? isActive, IMediator mediator) =>
         {
-            var query = new GetAllUsersQuery();
+            var query = new GetAllUsersQuery(isActive);
             var users = await mediator.Send(query);
             return Results.Ok(new { users });
 

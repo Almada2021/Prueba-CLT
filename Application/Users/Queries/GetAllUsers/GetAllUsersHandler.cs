@@ -9,9 +9,13 @@ public class GetAllUsersQueryHandler(AppDbContext context) : IRequestHandler<Get
 
     public async Task<List<UserResponseDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
+        var query = _context.Users.AsNoTracking();
         // GET ALL USERS
-        return await _context.Users
-              .AsNoTracking()
+        if (request.IsActive.HasValue)
+        {
+            query = query.Where(u => u.IsActive == request.IsActive.Value);
+        }
+        return await query
               .Select(user => new UserResponseDto
               {
                   Id = user.Id,
@@ -19,6 +23,6 @@ public class GetAllUsersQueryHandler(AppDbContext context) : IRequestHandler<Get
                   Email = user.Email,
                   IsActive = user.IsActive,
               })
-              .ToListAsync(cancellationToken); //
+              .ToListAsync(cancellationToken);
     }
 }
