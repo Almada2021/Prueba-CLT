@@ -1,12 +1,19 @@
-# write gitignore for .Net core project ignore notes folder
-notes
+## Directorios de salida de compilación
+bin/
+obj/
 
-# ignore bin and obj folders
+## Carpetas de herramientas (VS, VS Code, Rider)
+.vs/
+.vscode/
+*.user
+*.userosscache
+*.sln.docstates
 
-bin
-obj
+## Archivos de base de datos (SQLite)
+*.db
+*.db-shm
+*.db-wal
 
-# ignore .vs folder
-.vs
-
-PruebaTecnica.db
+## Otros
+notes/
+.env
