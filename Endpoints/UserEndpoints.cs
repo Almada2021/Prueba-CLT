@@ -6,6 +6,7 @@ using Application.Users;
 using Application.Users.Commands.UpdateUserCommand;
 using Application.Adresses.Common;
 using Application.Adresses.Commands;
+using Application.Adresses.Queries;
 
 namespace Endpoints;
 
@@ -117,6 +118,18 @@ public static class UserEndpoints
         .Produces<AdressResponseDto>(StatusCodes.Status201Created)
         .ProducesValidationProblem()
         .Produces<HttpValidationProblemDetails>(StatusCodes.Status409Conflict, "application/problem+json")
+        .Produces(StatusCodes.Status401Unauthorized);
+
+        // GET ALL ADDRESSES BY USER ID
+        usersGroup.MapGet("{id}/addresses", async (int id, IMediator mediator) =>
+        {
+            var query = new GetAllAddressesByUserIdQuery(id);
+            var addresses = await mediator.Send(query);
+            return Results.Ok(new { addresses });
+        })
+        .WithSummary("Obtener todas las direcciones")
+        .WithDescription("Obtiene todas las direcciones.")
+        .Produces<UserResponseDto>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status401Unauthorized);
     }
 }
