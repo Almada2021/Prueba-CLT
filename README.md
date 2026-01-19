@@ -1,33 +1,70 @@
-# Prueba CLT SA
+# Prueba Técnica - CLT S.A.
 
-Este repositorio fue creado para la prueba de la empresa CLT SA. en la cual me piden crear un API REST con .NET 10.0
-utilizando minimal Api y Entity Framework Core. validaciones con Fluent Validation. y el uso de swagger para la documentacion de la API.
-ademas de el uso de un header especifico para la autenticacion de las peticiones.
+Este repositorio contiene la solución desarrollada para el proceso de selección de **CLT S.A.** Se trata de una **API REST** desarrollada bajo el framework **.NET 10.0**, utilizando un enfoque de arquitectura moderna y eficiente.
 
-## Version de Dotnet usada
+## Tecnologías Implementadas
 
-- .NET 10.0.100
+* **.NET 10.0 (Minimal APIs):** Para una estructura de servicios ligera y de alto rendimiento.
+* **Entity Framework Core:** ORM para la gestión y persistencia de datos.
+* **Fluent Validation:** Implementación de reglas de validación de forma desacoplada y robusta.
+* **Swagger (OpenAPI):** Documentación interactiva para facilitar el consumo y pruebas de la API.
+* **Seguridad:** Sistema de autenticación basado en un **Header personalizado** para todas las peticiones.
 
-## Instrucciones para ejecutar el proyecto Local
+---
 
-1. Clonar el repositorio tener instalado dotnet 10.0.100 y entity framework core.
-2. Restaurar paquetes: dotnet restore
-3. Instalar las herramientas de EF (si no las tiene): `dotnet tool install --global dotnet-ef`
-4. Ejecutar el comando `dotnet ef database update` para crear la base de datos con sus tablas users, adresses y currencies.
-5. Ejecutar el comando `dotnet run` para iniciar el servidor
-6. Abrir el navegador y acceder a `http://localhost:5165/swagger` Para ver la documentacion de la API.
+## Requisitos de Software
 
-## Instrucciones para docker
-Este proceso puede tardar unos minutos en completarse la imagen de .net 10.0 es pesada.
-1. Tener Docker Desktop instalado y corriendo.
-2. Abrir una terminal en la carpeta de tu proyecto.
-3. Ejecutar: `docker-compose up --build`
+* **.NET SDK 10.0.100**
+* Herramientas de Entity Framework Core instaladas:
+    ```bash
+    dotnet tool install --global dotnet-ef
+    ```
 
-## Caracteristicas ya Implementadas de los requisitos
+---
 
-- Creacion de la base de datos con sus tablas users, adresses y currencies.
-- Creacion de los modelos de entidades con sus relaciones.
+## Instrucciones para Ejecución Local
 
-## Configuraciòn
+Siga estos pasos para configurar y ejecutar el proyecto en su entorno:
 
-La api key se puede configurar en el appsettings.json asi como el string de conexion a la base de datos. de momento se encuentra configurado para usar una base de datos en memoria. que por defecto se llama PruebaTecnica.db
+1.  **Clonar el repositorio** y situarse en la raíz del mismo.
+2.  **Restaurar dependencias:**
+    ```bash
+    dotnet restore
+    ```
+3.  **Configurar la Base de Datos:**
+    Ejecute el comando de migración para generar la base de datos local:
+    ```bash
+    dotnet ef database update
+    ```
+    > **Nota sobre los datos:** La API cuenta con un sistema de *Data Seeding*. Al ejecutar la actualización de la base de datos, se cargarán automáticamente **datos de prueba** en las tablas de `Users`, `Addresses` y `Currencies` para permitir una evaluación inmediata sin necesidad de cargas manuales.
+
+4.  **Iniciar la Aplicación:**
+    ```bash
+    dotnet run
+    ```
+5.  **Acceder a Swagger:**
+    Una vez iniciado el servidor, puede probar los endpoints en: `http://localhost:5165/swagger`
+
+---
+
+## Ejecución con Docker
+
+El proyecto está preparado para ejecutarse en contenedores (tenga en cuenta que la imagen de .NET 10 puede demorar unos minutos en descargarse por primera vez):
+
+1.  Asegúrese de tener **Docker Desktop** en ejecución.
+2.  Desde la terminal, en la carpeta raíz, ejecute:
+    ```bash
+    docker-compose up --build
+    ```
+
+---
+
+## Características Implementadas
+
+Todas Las requeridds
+
+## Configuración
+
+La configuración se centraliza en el archivo `appsettings.json`:
+* **API Key:** Clave configurable necesaria para la autenticación de los endpoints.
+* **Persistencia:** Por defecto, utiliza **SQLite** para facilitar la portabilidad, generando el archivo local `PruebaTecnica.db`.
