@@ -3,6 +3,7 @@ using Application.Currencies.Commands;
 using FluentValidation;
 using Application.Currencies;
 using Application.Currencies.Queries;
+using Application.Currencies.Commands.ConvertCurrency;
 namespace Endpoints;
 
 public static class CurrenciesEndpoints
@@ -41,10 +42,22 @@ public static class CurrenciesEndpoints
         .Produces(StatusCodes.Status401Unauthorized)
         ;
 
-        // app.MapPost("/currency/convert", async (IMediator mediator, ConvertCurrencyCommand command) =>
-        // {
-        //     var result = await mediator.Send(command);
-        //     return Results.Ok(result);
-        // });
+        app.MapPost("currency/convert", async (ConvertCurrencyCommand command, IMediator mediator, IValidator<ConvertCurrencyCommand> validator) =>
+        {
+            var validationResult = await validator.ValidateAsync(command);
+            if (!validationResult.IsValid)
+            {
+                return Results.ValidationProblem(validationResult.ToDictionary());
+            }
+
+            var result = await mediator.Send(command);
+            return Results.Ok(result);
+        })
+        .WithTags("currency")
+        .WithSummary("Convertir divisas")
+        .WithDescription("Convierte un monto de una moneda a otra usando la tasa base.")
+        .Produces<ConvertCurrencyResponse>(StatusCodes.Status200OK)
+        .ProducesValidationProblem()
+        .Produces(StatusCodes.Status404NotFound);
     }
 }
