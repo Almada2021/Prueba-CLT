@@ -4,7 +4,6 @@ using Middleware;
 using Application.Users.Commands;
 using Infrastructure.Data;
 using Endpoints;
-using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,16 +18,14 @@ builder.Services.AddMediatR(cfg =>
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserRequest>();
 
-// Configuración nativa de OpenAPI 
 builder.Services.AddOpenApi(options =>
 {
-    /*
-    Esto permite agregar el header X-API-KEY a todos los endpoints
-    facilitando la prueba de la API y el desarrollo.
-    */
+    options.OpenApiVersion = OpenApiSpecVersion.OpenApi3_0;
+
     options.AddOperationTransformer((operation, context, cancellationToken) =>
     {
-        operation.Parameters ??= new List<IOpenApiParameter>();
+        operation.Parameters ??= [];
+
         operation.Parameters.Add(new OpenApiParameter
         {
             Name = "X-API-KEY",
@@ -37,10 +34,10 @@ builder.Services.AddOpenApi(options =>
             Schema = new OpenApiSchema { Type = JsonSchemaType.String },
             Description = "Introduce tu API Key"
         });
+
         return Task.CompletedTask;
     });
 });
-
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
