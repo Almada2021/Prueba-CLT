@@ -1,6 +1,6 @@
 using MediatR;
 using Application.Addresses.Commands;
-
+using FluentValidation;
 namespace Endpoints;
 
 public static class AdressEndpoints
@@ -17,6 +17,26 @@ public static class AdressEndpoints
         })
         .WithSummary("Elimina una dirección")
         .WithDescription("Elimina una dirección por id")
+        .Produces(StatusCodes.Status200OK)
+        .ProducesValidationProblem()
+        .Produces<HttpValidationProblemDetails>(StatusCodes.Status404NotFound, "application/problem+json")
+        .Produces(StatusCodes.Status401Unauthorized);
+
+        adressGroup.MapPut("/{id}", async (IMediator mediator, int id, UpdateAddressRequest request, IValidator<UpdateAddressRequest> validator) =>
+        {
+            var validationResult = await validator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                return Results.ValidationProblem(validationResult.ToDictionary());
+            }
+
+            var command = new UpdateAddressCommand(id, request.Street, request.City, request.Country, request.ZipCode);
+            var result = await mediator.Send(command);
+
+            return Results.Ok(result);
+        })
+        .WithSummary("Actualiza una dirección")
+        .WithDescription("Actualiza una dirección por id")
         .Produces(StatusCodes.Status200OK)
         .ProducesValidationProblem()
         .Produces<HttpValidationProblemDetails>(StatusCodes.Status404NotFound, "application/problem+json")
