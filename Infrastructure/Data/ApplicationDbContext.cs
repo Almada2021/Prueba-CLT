@@ -40,6 +40,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.HasIndex(c => c.Code).IsUnique();
             entity.Property(c => c.Code).IsRequired();
             entity.Property(c => c.RateToBase).HasPrecision(18, 4);
+            entity.HasData(new Currency
+            {
+                Id = 1,
+                Code = "PYG",
+                Name = "Guaraní Paraguayo",
+                RateToBase = 1.0m // Moneda base 
+            });
         });
     }
 }
