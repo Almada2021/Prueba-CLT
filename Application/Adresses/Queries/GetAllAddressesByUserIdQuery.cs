@@ -1,6 +1,6 @@
-using Application.Adresses.Common;
+using Application.Addresses.Common;
 using MediatR;
 
-namespace Application.Adresses.Queries;
+namespace Application.Addresses.Queries;
 
 public record GetAllAddressesByUserIdQuery(int UserId) : IRequest<List<AdressResponseDto>>;

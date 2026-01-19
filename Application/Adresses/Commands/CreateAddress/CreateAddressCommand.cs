@@ -2,8 +2,8 @@ using Domain.Entities;
 using Domain.Exceptions;
 using Infrastructure.Data;
 using MediatR;
-using Application.Adresses.Common;
-namespace Application.Adresses.Commands;
+using Application.Addresses.Common;
+namespace Application.Addresses.Commands;
 
 public record CreateAdressCommand(int UserId, string Street, string City, string Country, string? ZipCode) : IRequest<AdressResponseDto>;
 

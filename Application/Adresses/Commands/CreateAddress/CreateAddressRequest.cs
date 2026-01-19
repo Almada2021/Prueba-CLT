@@ -1,4 +1,4 @@
-namespace Application.Adresses.Commands;
+namespace Application.Addresses.Commands;
 
 public class CreateAddressRequest
 {

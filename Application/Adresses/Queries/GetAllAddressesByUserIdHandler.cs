@@ -1,9 +1,9 @@
-using Application.Adresses.Common;
+using Application.Addresses.Common;
 using Infrastructure.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Adresses.Queries;
+namespace Application.Addresses.Queries;
 
 public class GetAllAddressesByUserIdHandler : IRequestHandler<GetAllAddressesByUserIdQuery, List<AdressResponseDto>>
 {

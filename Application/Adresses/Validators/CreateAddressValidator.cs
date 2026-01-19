@@ -1,4 +1,4 @@
-using Application.Adresses.Commands;
+using Application.Addresses.Commands;
 using FluentValidation;
 
 public class CreateAddressValidator : AbstractValidator<CreateAddressRequest>

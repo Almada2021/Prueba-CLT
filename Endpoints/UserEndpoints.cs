@@ -4,9 +4,9 @@ using Application.Users.Commands;
 using Application.Users.Queries;
 using Application.Users;
 using Application.Users.Commands.UpdateUserCommand;
-using Application.Adresses.Common;
-using Application.Adresses.Commands;
-using Application.Adresses.Queries;
+using Application.Addresses.Common;
+using Application.Addresses.Commands;
+using Application.Addresses.Queries;
 
 namespace Endpoints;
 
