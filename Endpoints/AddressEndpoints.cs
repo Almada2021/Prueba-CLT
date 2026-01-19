@@ -14,6 +14,12 @@ public static class AdressEndpoints
         {
             var result = await mediator.Send(new DeleteAddressCommand(id));
             return Results.Ok(result);
-        });
+        })
+        .WithSummary("Elimina una dirección")
+        .WithDescription("Elimina una dirección por id")
+        .Produces(StatusCodes.Status200OK)
+        .ProducesValidationProblem()
+        .Produces<HttpValidationProblemDetails>(StatusCodes.Status404NotFound, "application/problem+json")
+        .Produces(StatusCodes.Status401Unauthorized);
     }
 }
